@@ -1,0 +1,12 @@
+*.swp
+*.swo
+*.idea
+*__pycache__
+venv
+activate
+entities.json
+error.log
+web/resources/*
+!web/resources/images/
+web/resources/mapshots/maps/*
+xmra.egg-info
