@@ -3,13 +3,13 @@ This repository includes the REST API, and data model used by xonotic-map-reposi
 
 ## Setup
 
-```
+```bash
 python3 setup.py install
 ```
 
 Configuration is available in `~/.xmra.ini` with the default options:
 
-```
+```ini
 [default]
 # requires imagemagick
 extract_mapshots = True
@@ -21,7 +21,7 @@ extract_radars = True
 parse_entities = True
 
 # Base dir for generated resources
-resources_dir = /home/z/dev/xonotic-map-repositry-api/web/resources/
+resources_dir = ~/.xonotic/repo_resources/
 
 # db settings
 db_name = map_repo
@@ -33,8 +33,7 @@ db_port = 5432
 
 Once you configure your database, run `xmra-init` to create the database schema.
 
-You can add maps to the database with: `xmra-add -n mymap.pk3` where 'mymap' exists in the `resources_dir`
-in your `~/~.xmra.ini`.
+You can add maps to the database with: `xmra-add -n mymap.pk3` where `mymap.pk3` exists in the `packages` sub-directory of the `resources_dir` in your `~/~.xmra.ini`, e.g. `~/.xonotic/repo_resources/packages/`
 
 ##  Tips
 

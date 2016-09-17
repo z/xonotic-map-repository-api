@@ -15,7 +15,7 @@ config.read(config_file_with_path)
 
 conf = config['default']
 
-resources_dir = conf['resources_dir']
+resources_dir = os.path.expanduser(conf['resources_dir'])
 
 config = {
     'extract_mapshots': conf['extract_mapshots'],
