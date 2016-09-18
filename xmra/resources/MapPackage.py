@@ -1,6 +1,6 @@
 import json
 from xmra.repositories.local.db import session
-#from xmra.repositories.local.model import MapPackageBsp
+# from xmra.repositories.local.model import MapPackageBsp
 from xmra.repositories.local.model import MapPackage
 from xmra.repositories.local.model import Bsp
 from xmra.repositories.local.model import User
@@ -18,19 +18,6 @@ class MapPackageResource:
         print(req.params)
 
         map_packages = []
-        #q = session.query(MapPackageBsp).join(MapPackage).join(Bsp).all()
-        # q = session.query(MapPackageBsp, MapPackage, Bsp).all()
-        # for mp in q:
-        #     # print(mp.map_package_id)
-        #     r_map_package = {
-        #         'id': mp.MapPackage.map_package_id,
-        #         'bsp_id': mp.Bsp.bsp_id,
-        #         'pk3': mp.MapPackage.pk3_file,
-        #         'shasum': mp.MapPackage.shasum,
-        #         'filesize': mp.MapPackage.filesize,
-        #         'date': str(mp.MapPackage.date),
-        #     }
-        #     map_packages.append(r_map_package)
 
         q = session.query(MapPackage).filter(MapPackage.bsp.any())
         for mp in q:
@@ -39,11 +26,23 @@ class MapPackageResource:
                 'pk3': mp.pk3_file,
                 'bsp': {},
                 'shasum': mp.shasum,
+                'filesize': mp.filesize,
+                'date': mp.date,
             }
 
             for bsp in mp.bsp:
                 r_bsp = {
                     'bsp_file': bsp.bsp_file,
+                    'title': bsp.title,
+                    'license': bsp.license,
+                    'map': bsp.map_file,
+                    'radar': bsp.radar,
+                    'waypoints': bsp.waypoints,
+                    'description': bsp.description,
+                    'mapinfo': bsp.mapinfo,
+                    'entities': {},
+                    'mapshot': bsp.mapshot,
+                    'author': bsp.author
                 }
                 r_map_package['bsp'].update({bsp.bsp_name: r_bsp})
 
@@ -55,16 +54,6 @@ class MapPackageResource:
 
     def on_post(self, req, resp):
         pass
-        # print(req.params)
-        # user = User(name='john')
-        # keyword1 = Keyword(keyword='cool')
-        # keyword2 = Keyword(keyword='alright')
-        # keyword3 = Keyword(keyword='yay')
-        # user.kw.append(keyword1)
-        # user.kw.append(keyword2)
-        # user.kw.append(keyword3)
-        # session.add(user)
-        # session.commit()
 
 
 class UserResource:

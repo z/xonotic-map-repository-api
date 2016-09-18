@@ -70,7 +70,7 @@ class Bsp(Base): # right
     # gametype = relationship("Gametype", foreign_keys=[gametype_id])
     # entity = relationship("Entity", foreign_keys=[entity_id])
 
-    def __init__(self, bsp_name, bsp_file, map_file=None, mapshot=None, radar=None, title=None, description=None, mapinfo=None, author=None, entities_file=None, waypoints=None, license=None):
+    def __init__(self, bsp_name, bsp_file, map_file=None, mapshot=None, radar=None, title=None, description=None, mapinfo=None, author=None, waypoints=None, license=None):
         self.bsp_name = bsp_name
         self.bsp_file = bsp_file
         self.map_file = map_file
@@ -80,7 +80,7 @@ class Bsp(Base): # right
         self.description = description
         self.mapinfo = mapinfo
         self.author = author
-        self.entities_file = entities_file
+        # self.entities_file = entities_file
         self.waypoints = waypoints
         self.license = license
 
@@ -110,6 +110,9 @@ class Gametype(Base):
 
     __table_args__ = (UniqueConstraint('name', name='uix_gametype'),)
 
+    def __init__(self, name):
+        self.name = name
+
 
 class Entity(Base):
     __tablename__ = 'entity'
@@ -117,6 +120,9 @@ class Entity(Base):
     name = Column(String(255))
 
     __table_args__ = (UniqueConstraint('name', name='uix_entity'),)
+
+    def __init__(self, name):
+        self.name = name
 
 
 class BspGametype(Base):
