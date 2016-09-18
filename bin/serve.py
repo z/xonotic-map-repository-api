@@ -7,6 +7,7 @@ import gunicorn.app.base
 from gunicorn.six import iteritems
 
 from xmra import app
+from xmra.dependency_graph import config
 
 
 def number_of_workers():
@@ -30,7 +31,7 @@ class StandaloneApplication(gunicorn.app.base.BaseApplication):
         return self.application
 
 options = {
-    'bind': '%s:%s' % ('127.0.0.1', '8010'),
+    'bind': '%s:%s' % (config['api']['host'], config['api']['port']),
     'reload': True
 }
 StandaloneApplication(app.api, options).run()

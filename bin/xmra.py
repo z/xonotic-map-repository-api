@@ -9,7 +9,7 @@ import time
 import os
 import datetime
 from xmra.repositories.local.model import Library
-from xmra.xonotic.packages import MapPackage
+from xmra.xonotic.objects import MapPackage
 from xmra.dependency_graph import config
 from xmra.repositories.local.db import session
 from xmra.helpers.database import get_or_create

@@ -29,6 +29,10 @@ db_user = xonotic
 db_password = password
 db_host = localhost
 db_port = 5432
+
+# api settings 
+api_host = localhost
+api_port = 8010
 ```
 
 Once you configure your database, run `xmra-init` to create the database schema.

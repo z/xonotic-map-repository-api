@@ -29,6 +29,10 @@ config = {
         'host': conf['db_host'],
         'port': conf['db_port'],
     },
+    'api': {
+        'host': conf['api_host'],
+        'port': conf['api_port'],
+    },
     'output_paths': {
         'packages': resources_dir + 'packages/',
         'mapshots': resources_dir + 'mapshots/',
