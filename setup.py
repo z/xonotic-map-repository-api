@@ -23,7 +23,7 @@ setup(
     packages=find_packages(exclude=('tests', 'docs')),
     entry_points={
        'console_scripts': [
-          'xmra-add = xmra.maps2json:main',
+          'xmra-add = xmra:main',
           'xmra-init = xmra.repositories.local.model:setup_db',
        ]
     },

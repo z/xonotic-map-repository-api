@@ -4,8 +4,6 @@
 # Author: Tyler "-z-" Mulligan
 # Contact: z@xnz.me
 
-from xmra import maps2json
+from xmra import main
 
-
-def main():
-    maps2json.main()
+main()
