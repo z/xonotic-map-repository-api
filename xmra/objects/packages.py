@@ -194,7 +194,7 @@ class MapPackage(object):
                                 zip.extract(member, path_radars)
                                 radar_image = path_radars + member
                                 subprocess.call(['convert', radar_image, '-depth', '8', '-trim', 'PNG24:' + path_radars + 'gfx/' + bsp + '_mini.png'])
-                                # subprocess.call(['./bin/entities_map.py', bsp])
+                                # TODO: bring back entity radar overlay
 
                         if re.search('^maps/' + rbsp + '\.map$', member):
                             data['bsp'][bspname]['map_file'] = member
