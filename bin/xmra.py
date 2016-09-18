@@ -25,94 +25,77 @@ def main():
 
     if args.all:
 
-        library = Library()
-
         # Process all the files
         for file in sorted(os.listdir(config['output_paths']['packages'])):
             if file.endswith('.pk3'):
-                mypk3 = MapPackage(pk3_file=file)
-                pk3, category, errors = mypk3.process_package()
-
-                print(pk3.pk3_file)
-
-                library.add_map_package(pk3=pk3, category=category)
-
-                # if status['errors']:
-                #     errors = True
-
-        # Write error.log
-
-        all_maps = library.to_json()
-
-        fo = open(config['output_paths']['data'] + 'maps.json', 'w')
-        fo.write(all_maps)
-        fo.close()
+                pk3, category, errors = add_map_package(file)
 
     if args.new:
 
         file = args.new
-
-        if file.endswith('.pk3') and os.path.isfile(config['output_paths']['packages'] + file):
-            mypk3 = MapPackage(pk3_file=file)
-            pk3, category, errors = mypk3.process_package()
-
-            map_package = model.MapPackage(pk3_file=pk3.pk3_file, shasum=pk3.shasum, filesize=pk3.filesize)
-
-            session.add(map_package)
-            session.commit()
-
-            print(map_package.map_package_id)
-
-            for bsp_name, bsp in pk3.bsp.items():
-
-                new_bsp = model.Bsp(
-                    map_package_id=map_package.map_package_id,
-                    bsp_name=bsp.bsp_name,
-                    bsp_file=bsp.bsp_file,
-                    map_file=bsp.map_file,
-                    mapshot=bsp.mapshot,
-                    radar=bsp.radar,
-                    title=bsp.title,
-                    description=bsp.description,
-                    mapinfo=bsp.mapinfo,
-                    author=bsp.author,
-                    waypoints=bool(bsp.waypoints),
-                    license=bool(bsp.license),
-                    entities=bsp.entities,
-                )
-
-                print(new_bsp)
-
-                session.add(new_bsp)
-                session.commit()
-
-                map_package.bsp.append(new_bsp)
-
-                if bsp.gametypes:
-                    for gametype in bsp.gametypes:
-                        print(gametype)
-                        gametype = get_or_create(session, model.Gametype, name=gametype)
-                        bsp_gametype = get_or_create(session, model.BspGametype, bsp_id=new_bsp.bsp_id, gametype_id=gametype.gametype_id)
-                        print(new_bsp.bsp_id)
-
-                if bsp.entities:
-                    for entity, value in bsp.entities.items():
-                        print(entity)
-                        entity = get_or_create(session, model.Entity, name=entity)
-                        bsp_entity = get_or_create(session, model.BspEntity, bsp_id=new_bsp.bsp_id, entity_id=entity.entity_id, value=value)
-
-            session.add(map_package)
-            session.commit()
-
-            # if status['errors']:
-            #     errors = True
-
-        else:
-            print('Not found or not pk3.')
-            raise SystemExit
+        pk3, category, errors = add_map_package(file)
 
     end_time = time.monotonic()
     print('Operation took: ' + str(datetime.timedelta(seconds=end_time - start_time)))
+
+
+def add_map_package(file):
+
+    if file.endswith('.pk3') and os.path.isfile(config['output_paths']['packages'] + file):
+        mypk3 = MapPackage(pk3_file=file)
+        pk3, category, errors = mypk3.process_package()
+
+        map_package = model.MapPackage(pk3_file=pk3.pk3_file, shasum=pk3.shasum, filesize=pk3.filesize)
+
+        session.add(map_package)
+        session.commit()
+
+        for bsp_name, bsp in pk3.bsp.items():
+
+            new_bsp = model.Bsp(
+                map_package_id=map_package.map_package_id,
+                bsp_name=bsp.bsp_name,
+                bsp_file=bsp.bsp_file,
+                map_file=bsp.map_file,
+                mapshot=bsp.mapshot,
+                radar=bsp.radar,
+                title=bsp.title,
+                description=bsp.description,
+                mapinfo=bsp.mapinfo,
+                author=bsp.author,
+                waypoints=bool(bsp.waypoints),
+                license=bool(bsp.license),
+                entities=bsp.entities,
+            )
+
+            print(new_bsp)
+
+            session.add(new_bsp)
+            session.commit()
+
+            map_package.bsp.append(new_bsp)
+
+            if bsp.gametypes:
+                for gametype in bsp.gametypes:
+                    print(gametype)
+                    gametype = get_or_create(session, model.Gametype, name=gametype)
+                    bsp_gametype = get_or_create(session, model.BspGametype, bsp_id=new_bsp.bsp_id, gametype_id=gametype.gametype_id)
+                    print(new_bsp.bsp_id)
+
+            if bsp.entities:
+                for entity, value in bsp.entities.items():
+                    print(entity)
+                    entity = get_or_create(session, model.Entity, name=entity)
+                    bsp_entity = get_or_create(session, model.BspEntity, bsp_id=new_bsp.bsp_id, entity_id=entity.entity_id, value=value)
+
+        session.add(map_package)
+        session.commit()
+
+        return pk3, category, errors
+
+    else:
+        print('Not found or not pk3.')
+        raise SystemExit
 
 
 def parse_args():
