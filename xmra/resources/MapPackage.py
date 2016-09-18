@@ -17,10 +17,30 @@ class MapPackageCollection:
         """Handles GET requests"""
         print(req.params)
 
-        q = session.query(MapPackage).filter(MapPackage.bsp.any())
+        records_total = session.query(MapPackage).count()
+
+        if 'start' in req.params:
+            offset = req.params['start']
+        else:
+            offset = 0
+        if 'length' in req.params:
+            limit = req.params['length']
+        else:
+            limit = 100
+        if 'draw' in req.params:
+            draw = req.params['draw']
+        else:
+            draw = 0
+
+        q = session.query(MapPackage).filter(MapPackage.bsp.any()).limit(limit).offset(offset)
         map_packages = get_map_json(q)
 
-        resp.body = json.dumps({'data': map_packages}, cls=ObjectEncoder)
+        resp.body = json.dumps({
+            'data': map_packages,
+            'draw': draw,
+            'recordsTotal': records_total,
+            'recordsFiltered': records_total,
+        }, cls=ObjectEncoder)
 
     def on_post(self, req, resp):
         pass

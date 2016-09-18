@@ -12,7 +12,7 @@ engine = create_engine(
         str(config['db']['port']),
         str(config['db']['name']),
     ),
-    echo=True,
+    # echo=True,
     encoding="utf-8"
 )
 
