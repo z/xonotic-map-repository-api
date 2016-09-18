@@ -23,8 +23,8 @@ setup(
     packages=find_packages(exclude=('tests', 'docs')),
     entry_points={
        'console_scripts': [
-          'xmra-add = xmra:main',
-          'xmra-init = xmra.repositories.local.model:setup_db',
+          'xmra-add = bin.xmra:main',
+          'xmra-init = bin.setup_db:main',
        ]
     },
     install_requires=required
