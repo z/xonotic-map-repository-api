@@ -116,7 +116,6 @@ class BspGametype(Base):
     bsp_gametype_id = Column(Integer, primary_key=True)
     bsp_id = Column(ForeignKey('bsp.bsp_id'))
     gametype_id = Column(ForeignKey('gametype.gametype_id'))
-    value = Column(String(16))
 
     bsp = relationship("Bsp", foreign_keys=[bsp_id])
     gametype = relationship("Gametype", foreign_keys=[gametype_id])

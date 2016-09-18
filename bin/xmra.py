@@ -96,10 +96,10 @@ def main():
                         print(new_bsp.bsp_id)
 
                 if bsp.entities:
-                    for entity in bsp.entities:
+                    for entity, value in bsp.entities.items():
                         print(entity)
                         entity = get_or_create(session, model.Entity, name=entity)
-                        bsp_entity = get_or_create(session, model.BspEntity, bsp_id=new_bsp.bsp_id, entity_id=entity.entity_id)
+                        bsp_entity = get_or_create(session, model.BspEntity, bsp_id=new_bsp.bsp_id, entity_id=entity.entity_id, value=value)
 
             session.add(map_package)
             session.commit()
