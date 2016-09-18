@@ -77,39 +77,3 @@ class MapPackageResource:
 
     def on_post(self, req, resp):
         pass
-
-
-class UserResource:
-
-    def on_get(self, req, resp):
-        """Handles GET requests"""
-        print(req.params)
-
-        map_packages = []
-        q = session.query(User, Keyword).all()
-        for mp in q:
-            print(mp)
-            r_map_package = {
-                'id': mp.User.id,
-                'keyword_id': mp.Keyword.id,
-                'keyword': mp.Keyword.keyword,
-                'user': mp.User.name,
-            }
-            map_packages.append(r_map_package)
-
-        print(map_packages)
-
-        resp.body = json.dumps(map_packages, cls=ObjectEncoder)
-
-    def on_post(self, req, resp):
-        """Handles GET requests"""
-        print(req.params)
-        user = User(name='john')
-        keyword1 = Keyword(keyword='cool')
-        keyword2 = Keyword(keyword='alright')
-        keyword3 = Keyword(keyword='yay')
-        user.kw.append(keyword1)
-        user.kw.append(keyword2)
-        user.kw.append(keyword3)
-        session.add(user)
-        session.commit()
