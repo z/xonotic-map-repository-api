@@ -32,20 +32,20 @@ class MapPackageResource:
         #     }
         #     map_packages.append(r_map_package)
 
-        q = session.query(MapPackage, Bsp).all()
+        q = session.query(MapPackage).filter(MapPackage.bsp.any())
         for mp in q:
             r_map_package = {
-                'id': mp.MapPackage.map_package_id,
-                'pk3': mp.MapPackage.pk3_file,
+                'id': mp.map_package_id,
+                'pk3': mp.pk3_file,
                 'bsp': {},
-                'shasum': mp.MapPackage.shasum,
+                'shasum': mp.shasum,
             }
 
-            for bsp in mp.MapPackage.bsp:
+            for bsp in mp.bsp:
                 r_bsp = {
-                    'bsp_file': mp.Bsp.bsp_file,
+                    'bsp_file': bsp.bsp_file,
                 }
-                r_map_package['bsp'].update({mp.Bsp.bsp_name: r_bsp})
+                r_map_package['bsp'].update({bsp.bsp_name: r_bsp})
 
             map_packages.append(r_map_package)
 
