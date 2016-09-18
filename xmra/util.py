@@ -57,6 +57,19 @@ def hash_file(filename):
     return h.hexdigest()
 
 
+class DateTimeEncoder(json.JSONEncoder):
+    """
+    JSONEncoder subclass that leverages an object's `__json__()` method,
+    if available, to obtain its default JSON representation.
+    http://stackoverflow.com/a/24030569
+    """
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+
+        return json.JSONEncoder.default(self, obj)
+
+
 class ObjectEncoder(json.JSONEncoder):
     """
     JSONEncoder subclass that leverages an object's `__json__()` method,
@@ -64,15 +77,9 @@ class ObjectEncoder(json.JSONEncoder):
     http://stackoverflow.com/a/24030569
     """
     def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.isoformat()
         if hasattr(obj, '__json__'):
             return obj.__json__()
+
         return json.JSONEncoder.default(self, obj)
-
-
-class DateTimeEncoder(json.JSONEncoder):
-    def default(self, o):
-        if isinstance(o, datetime):
-            return o.isoformat()
-
-        return json.JSONEncoder.default(self, o)
-

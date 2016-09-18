@@ -15,20 +15,9 @@ class MapPackageResource:
         q = session.query(model.MapPackage)
         map_packages = []
         for map_package in q:
-            print(map_package)
-            # map_package = MapPackage(
-            #     pk3_file=map_package.pk3_file
-            # )
-            # map_packages.append(map_package.to_json())
-            r_map_package = {
-                'map_id': map_package.map_package_id,
-                'pk3_file': map_package.pk3_file,
-                'shasum': map_package.shasum,
-                'date': map_package.date,
-            }
-            map_packages.append(r_map_package)
+            map_packages.append(map_package)
 
-        resp.body = json.dumps(map_packages, cls=DateTimeEncoder)
+        resp.body = json.dumps(map_packages, cls=ObjectEncoder)
 
     def on_post(self, req, resp):
         """Handles GET requests"""

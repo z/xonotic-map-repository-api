@@ -36,6 +36,16 @@ class MapPackage(Base):
     date = Column(DateTime, nullable=False, default=datetime.now())
     filesize = Column(Integer)
 
+    def __json__(self):
+        return {
+            'id': self.map_package_id,
+            'bsp_id': self.bsp_id,
+            'pk3': self.pk3_file,
+            'shasum': self.shasum,
+            'filesize': self.filesize,
+            'date': str(self.date),
+        }
+
     __table_args__ = (UniqueConstraint('pk3_file', name='uix_pk3_file'),)
 
 
