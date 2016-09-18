@@ -58,9 +58,15 @@ def main():
 
             map_package = model.MapPackage(pk3_file=pk3.pk3_file, shasum=pk3.shasum, filesize=pk3.filesize)
 
+            session.add(map_package)
+            session.commit()
+
+            print(map_package.map_package_id)
+
             for bsp_name, bsp in pk3.bsp.items():
 
                 new_bsp = model.Bsp(
+                    map_package_id=map_package.map_package_id,
                     bsp_name=bsp.bsp_name,
                     bsp_file=bsp.bsp_file,
                     map_file=bsp.map_file,
@@ -72,6 +78,7 @@ def main():
                     author=bsp.author,
                     waypoints=bool(bsp.waypoints),
                     license=bool(bsp.license),
+                    entities=bsp.entities,
                 )
 
                 print(new_bsp)

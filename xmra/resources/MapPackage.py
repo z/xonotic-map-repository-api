@@ -3,8 +3,8 @@ from xmra.repositories.local.db import session
 # from xmra.repositories.local.model import MapPackageBsp
 from xmra.repositories.local.model import MapPackage
 from xmra.repositories.local.model import Bsp
-from xmra.repositories.local.model import User
-from xmra.repositories.local.model import Keyword
+from xmra.repositories.local.model import BspEntity
+from xmra.repositories.local.model import Entity
 # from xmra.xonotic.objects import MapPackage
 from xmra.util import ObjectEncoder
 from xmra.util import DateTimeEncoder
@@ -45,6 +45,13 @@ class MapPackageResource:
                     'author': bsp.author
                 }
                 r_map_package['bsp'].update({bsp.bsp_name: r_bsp})
+
+                # q_entities = session.query(BspEntity).join(Entity).filter(BspEntity.bsp.has(bsp_id=bsp.bsp_id))
+                #
+                # for entity in bsp.entities:
+                #     r_bsp['entities'].update({entity.name: 0})
+                #
+                # print(q_entities)
 
             map_packages.append(r_map_package)
 
