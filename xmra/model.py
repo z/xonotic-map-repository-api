@@ -17,16 +17,16 @@ class ExtendMixin(object):
 
 class Author(ExtendMixin, Base):
     __tablename__ = 'author'
-    id = Column(Integer, primary_key=True)
+    author_id = Column(Integer, primary_key=True)
     name = Column(String(100), nullable=False)
     email = Column(String(100), nullable=False)
 
 
 class Library(ExtendMixin, Base):
     __tablename__ = 'library'
-    id = Column(Integer, primary_key=True)
+    library_id = Column(Integer, primary_key=True)
     name = Column(String(80))
-    map_package_id = Column(ForeignKey('map_package.id'))
+    map_package_id = Column(ForeignKey('map_package.map_package_id'))
     map_package = relationship("MapPackage", foreign_keys=[map_package_id])
 
     __table_args__ = (UniqueConstraint('name', name='uix_library_name'),)
@@ -34,10 +34,10 @@ class Library(ExtendMixin, Base):
 
 class MapPackage(ExtendMixin, Base):
     __tablename__ = 'map_package'
-    id = Column(Integer, primary_key=True)
+    map_package_id = Column(Integer, primary_key=True)
     pk3_file = Column(String(255))
     shasum = Column(String(64))
-    bsp_id = Column(ForeignKey('bsp.id'))
+    bsp_id = Column(ForeignKey('bsp.bsp_id'))
     bsp = relationship("Bsp", foreign_keys=[bsp_id])
     date = Column(DateTime, nullable=False, default=datetime.now())
     filesize = Column(Integer)
@@ -47,8 +47,8 @@ class MapPackage(ExtendMixin, Base):
 
 class Bsp(ExtendMixin, Base):
     __tablename__ = 'bsp'
-    id = Column(Integer, primary_key=True)
-    map_package_id = Column(Integer, ForeignKey('map_package.id'))
+    bsp_id = Column(Integer, primary_key=True)
+    map_package_id = Column(Integer, ForeignKey('map_package.map_package_id'))
     pk3_file = Column(String(255))
     bsp_name = Column(String(255))
     bsp_file = Column(String(255))
@@ -59,20 +59,27 @@ class Bsp(ExtendMixin, Base):
     description = Column(String(600))
     mapinfo = Column(String(255))
     author = Column(String(100))
-    gametype_id = Column(ForeignKey('gametype.id'))
+    gametype_id = Column(ForeignKey('gametype.gametype_id'))
     gametype = relationship("Gametype", foreign_keys=[gametype_id])
-    entity_id = Column(ForeignKey('entity.id'))
+    entity_id = Column(ForeignKey('entity.entity_id'))
     entity = relationship("Entity", foreign_keys=[entity_id])
     entities_file = Column(String(255))
     waypoints = Column(Boolean)
     license = Column(Boolean)
 
-    #bsp = relationship("MapPackage", backref="bsp")
+
+class MapPackageBsp(ExtendMixin, Base):
+    __tablename__ = 'map_package_bsp'
+    map_package_bsp_id = Column(Integer, primary_key=True)
+    map_package_id = Column(ForeignKey('map_package.map_package_id'))
+    map_package = relationship("MapPackage", foreign_keys=[map_package_id])
+    bsp_id = Column(ForeignKey('bsp.bsp_id'))
+    bsp = relationship("Bsp", foreign_keys=[bsp_id])
 
 
 class Gametype(ExtendMixin, Base):
     __tablename__ = 'gametype'
-    id = Column(Integer, primary_key=True)
+    gametype_id = Column(Integer, primary_key=True)
     name = Column(String(255))
 
     __table_args__ = (UniqueConstraint('name', name='uix_gametype'),)
@@ -80,10 +87,28 @@ class Gametype(ExtendMixin, Base):
 
 class Entity(ExtendMixin, Base):
     __tablename__ = 'entity'
-    id = Column(Integer, primary_key=True)
+    entity_id = Column(Integer, primary_key=True)
     name = Column(String(255))
 
     __table_args__ = (UniqueConstraint('name', name='uix_entity'),)
+
+
+class BspGametype(ExtendMixin, Base):
+    __tablename__ = 'bsp_gametype'
+    bsp_gametype_id = Column(Integer, primary_key=True)
+    bsp_id = Column(ForeignKey('bsp.bsp_id'))
+    bsp = relationship("Bsp", foreign_keys=[bsp_id])
+    gametype_id = Column(ForeignKey('gametype.gametype_id'))
+    gametype = relationship("Gametype", foreign_keys=[gametype_id])
+
+
+class BspEntity(ExtendMixin, Base):
+    __tablename__ = 'bsp_entity'
+    bsp_entity_id = Column(Integer, primary_key=True)
+    bsp_id = Column(ForeignKey('bsp.bsp_id'))
+    bsp = relationship("Bsp", foreign_keys=[bsp_id])
+    entity_id = Column(ForeignKey('entity.entity_id'))
+    entity = relationship("Entity", foreign_keys=[entity_id])
 
 
 def setup_db():
