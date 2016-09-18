@@ -39,3 +39,7 @@ You can add maps to the database with: `xmra-add -n mymap.pk3` where `mymap.pk3`
 
 There is a docker folder with a `docker-compose.yml` file. If you prefer to use docker instead of
 installing postgres on your host, you can `cd docker` && `docker-compose up`
+
+## License
+
+Licensed under MIT
