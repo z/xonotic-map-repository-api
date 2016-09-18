@@ -9,20 +9,14 @@ from xmra.repositories.local.db import engine
 from xmra.repositories.local.db import Base
 
 
-class ExtendMixin(object):
-
-    def as_dict(self):
-        return
-
-
-class Author(ExtendMixin, Base):
+class Author(Base):
     __tablename__ = 'author'
     author_id = Column(Integer, primary_key=True)
     name = Column(String(100), nullable=False)
     email = Column(String(100), nullable=False)
 
 
-class Library(ExtendMixin, Base):
+class Library(Base):
     __tablename__ = 'library'
     library_id = Column(Integer, primary_key=True)
     name = Column(String(80))
@@ -32,7 +26,7 @@ class Library(ExtendMixin, Base):
     __table_args__ = (UniqueConstraint('name', name='uix_library_name'),)
 
 
-class MapPackage(ExtendMixin, Base):
+class MapPackage(Base):
     __tablename__ = 'map_package'
     map_package_id = Column(Integer, primary_key=True)
     pk3_file = Column(String(255))
@@ -45,7 +39,7 @@ class MapPackage(ExtendMixin, Base):
     __table_args__ = (UniqueConstraint('pk3_file', name='uix_pk3_file'),)
 
 
-class Bsp(ExtendMixin, Base):
+class Bsp(Base):
     __tablename__ = 'bsp'
     bsp_id = Column(Integer, primary_key=True)
     map_package_id = Column(Integer, ForeignKey('map_package.map_package_id'))
@@ -68,7 +62,7 @@ class Bsp(ExtendMixin, Base):
     license = Column(Boolean)
 
 
-class MapPackageBsp(ExtendMixin, Base):
+class MapPackageBsp(Base):
     __tablename__ = 'map_package_bsp'
     map_package_bsp_id = Column(Integer, primary_key=True)
     map_package_id = Column(ForeignKey('map_package.map_package_id'))
@@ -77,7 +71,7 @@ class MapPackageBsp(ExtendMixin, Base):
     bsp = relationship("Bsp", foreign_keys=[bsp_id])
 
 
-class Gametype(ExtendMixin, Base):
+class Gametype(Base):
     __tablename__ = 'gametype'
     gametype_id = Column(Integer, primary_key=True)
     name = Column(String(255))
@@ -85,7 +79,7 @@ class Gametype(ExtendMixin, Base):
     __table_args__ = (UniqueConstraint('name', name='uix_gametype'),)
 
 
-class Entity(ExtendMixin, Base):
+class Entity(Base):
     __tablename__ = 'entity'
     entity_id = Column(Integer, primary_key=True)
     name = Column(String(255))
@@ -93,7 +87,7 @@ class Entity(ExtendMixin, Base):
     __table_args__ = (UniqueConstraint('name', name='uix_entity'),)
 
 
-class BspGametype(ExtendMixin, Base):
+class BspGametype(Base):
     __tablename__ = 'bsp_gametype'
     bsp_gametype_id = Column(Integer, primary_key=True)
     bsp_id = Column(ForeignKey('bsp.bsp_id'))
@@ -102,7 +96,7 @@ class BspGametype(ExtendMixin, Base):
     gametype = relationship("Gametype", foreign_keys=[gametype_id])
 
 
-class BspEntity(ExtendMixin, Base):
+class BspEntity(Base):
     __tablename__ = 'bsp_entity'
     bsp_entity_id = Column(Integer, primary_key=True)
     bsp_id = Column(ForeignKey('bsp.bsp_id'))

@@ -33,7 +33,13 @@ db_port = 5432
 
 Once you configure your database, run `xmra-init` to create the database schema.
 
+# Add Maps
+
 You can add maps to the database with: `xmra-add -n mymap.pk3` where `mymap.pk3` exists in the `packages` sub-directory of the `resources_dir` in your `~/~.xmra.ini`, e.g. `~/.xonotic/repo_resources/packages/`
+
+## Start the API
+
+`xmra-serve` uses gunicorn to serve the repository as a wsgi application.
 
 ##  Tips
 

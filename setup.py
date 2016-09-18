@@ -25,6 +25,7 @@ setup(
        'console_scripts': [
           'xmra-add = bin.xmra:main',
           'xmra-init = bin.setup_db:main',
+          'xmra-serve = bin.serve:main',
        ]
     },
     install_requires=required
