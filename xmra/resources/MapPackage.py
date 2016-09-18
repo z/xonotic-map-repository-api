@@ -1,9 +1,14 @@
 import json
 from xmra.repositories.local.db import session
-from xmra.repositories.local import model
-from xmra.xonotic.objects import MapPackage
+#from xmra.repositories.local.model import MapPackageBsp
+from xmra.repositories.local.model import MapPackage
+from xmra.repositories.local.model import Bsp
+from xmra.repositories.local.model import User
+from xmra.repositories.local.model import Keyword
+# from xmra.xonotic.objects import MapPackage
 from xmra.util import ObjectEncoder
 from xmra.util import DateTimeEncoder
+from sqlalchemy import func
 
 
 class MapPackageResource:
@@ -12,16 +17,87 @@ class MapPackageResource:
         """Handles GET requests"""
         print(req.params)
 
-        q = session.query(model.MapPackage)
         map_packages = []
-        for map_package in q:
-            map_packages.append(map_package)
+        #q = session.query(MapPackageBsp).join(MapPackage).join(Bsp).all()
+        # q = session.query(MapPackageBsp, MapPackage, Bsp).all()
+        # for mp in q:
+        #     # print(mp.map_package_id)
+        #     r_map_package = {
+        #         'id': mp.MapPackage.map_package_id,
+        #         'bsp_id': mp.Bsp.bsp_id,
+        #         'pk3': mp.MapPackage.pk3_file,
+        #         'shasum': mp.MapPackage.shasum,
+        #         'filesize': mp.MapPackage.filesize,
+        #         'date': str(mp.MapPackage.date),
+        #     }
+        #     map_packages.append(r_map_package)
+
+        q = session.query(MapPackage, Bsp).all()
+        for mp in q:
+            r_map_package = {
+                'id': mp.MapPackage.map_package_id,
+                'pk3': mp.MapPackage.pk3_file,
+                'bsp': {},
+                'shasum': mp.MapPackage.shasum,
+            }
+
+            for bsp in mp.MapPackage.bsp:
+                r_bsp = {
+                    'bsp_file': mp.Bsp.bsp_file,
+                }
+                r_map_package['bsp'].update({mp.Bsp.bsp_name: r_bsp})
+
+            map_packages.append(r_map_package)
+
+        print(map_packages)
+
+        resp.body = json.dumps(map_packages, cls=ObjectEncoder)
+
+    def on_post(self, req, resp):
+        pass
+        # print(req.params)
+        # user = User(name='john')
+        # keyword1 = Keyword(keyword='cool')
+        # keyword2 = Keyword(keyword='alright')
+        # keyword3 = Keyword(keyword='yay')
+        # user.kw.append(keyword1)
+        # user.kw.append(keyword2)
+        # user.kw.append(keyword3)
+        # session.add(user)
+        # session.commit()
+
+
+class UserResource:
+
+    def on_get(self, req, resp):
+        """Handles GET requests"""
+        print(req.params)
+
+        map_packages = []
+        q = session.query(User, Keyword).all()
+        for mp in q:
+            print(mp)
+            r_map_package = {
+                'id': mp.User.id,
+                'keyword_id': mp.Keyword.id,
+                'keyword': mp.Keyword.keyword,
+                'user': mp.User.name,
+            }
+            map_packages.append(r_map_package)
+
+        print(map_packages)
 
         resp.body = json.dumps(map_packages, cls=ObjectEncoder)
 
     def on_post(self, req, resp):
         """Handles GET requests"""
         print(req.params)
-        map_package = model.MapPackage(**req.params)
-        session.add(map_package)
+        user = User(name='john')
+        keyword1 = Keyword(keyword='cool')
+        keyword2 = Keyword(keyword='alright')
+        keyword3 = Keyword(keyword='yay')
+        user.kw.append(keyword1)
+        user.kw.append(keyword2)
+        user.kw.append(keyword3)
+        session.add(user)
         session.commit()

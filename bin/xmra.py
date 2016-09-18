@@ -61,7 +61,8 @@ def main():
             mypk3 = MapPackage(pk3_file=file)
             pk3, category, errors = mypk3.process_package()
 
-            map_package = get_or_create(session, model.MapPackage, pk3_file=pk3.pk3_file, shasum=pk3.shasum, filesize=pk3.filesize)
+            # map_package = get_or_create(session, model.MapPackage, pk3_file=pk3.pk3_file, shasum=pk3.shasum, filesize=pk3.filesize)
+            map_package = model.MapPackage(pk3_file=pk3.pk3_file, shasum=pk3.shasum, filesize=pk3.filesize)
 
             print(pk3.pk3_file)
             #print(pk3)
@@ -69,22 +70,24 @@ def main():
             for bsp_name, bsp in pk3.bsp.items():
                 #print(bsp)
 
-                new_bsp = get_or_create(session, model.Bsp, bsp_name=bsp.bsp_name, bsp_file=bsp.bsp_file)
+                new_bsp = model.Bsp(bsp_name=bsp.bsp_name, bsp_file=bsp.bsp_file)
+                map_package.bsp.append(new_bsp)
 
                 if bsp.gametypes:
                     for gametype in bsp.gametypes:
                         print(gametype)
-                        gametype = get_or_create(session, model.Gametype, name=gametype)
-                        bsp_gametype = get_or_create(session, model.BspGametype, bsp_id=new_bsp.bsp_id, gametype_id=gametype.gametype_id)
+                        # gametype = get_or_create(session, model.Gametype, name=gametype)
+                        # bsp_gametype = get_or_create(session, model.BspGametype, bsp_id=new_bsp.bsp_id, gametype_id=gametype.gametype_id)
 
                 if bsp.entities:
                     for entity in bsp.entities:
                         print(entity)
-                        entity = get_or_create(session, model.Entity, name=entity)
-                        bsp_entity = get_or_create(session, model.BspEntity, bsp_id=new_bsp.bsp_id, entity_id=entity.entity_id)
+                        # entity = get_or_create(session, model.Entity, name=entity)
+                        # bsp_entity = get_or_create(session, model.BspEntity, bsp_id=new_bsp.bsp_id, entity_id=entity.entity_id)
 
-                new_map_package_bsp = get_or_create(session, model.MapPackageBsp, map_package_id=map_package.map_package_id, bsp_id=new_bsp.bsp_id)
+                #new_map_package_bsp = get_or_create(session, model.MapPackageBsp, map_package_id=map_package.map_package_id, bsp_id=new_bsp.bsp_id)
 
+            session.add(map_package)
             session.commit()
 
             # if status['errors']:
