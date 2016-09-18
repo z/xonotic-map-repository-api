@@ -5,8 +5,8 @@ from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import column_property
 from sqlalchemy import UniqueConstraint
 from datetime import datetime
-from xmra.database import engine
-from xmra.database import Base
+from xmra.repositories.local.db import engine
+from xmra.repositories.local.db import Base
 
 
 class ExtendMixin(object):

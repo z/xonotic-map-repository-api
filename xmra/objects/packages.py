@@ -8,9 +8,9 @@ import collections
 from datetime import datetime
 from xmra.util import hash_file
 from xmra.util import ObjectEncoder
-from xmra.entities import entities_mapping
-from xmra.gametypes import gametype_mapping
-from xmra.config import config
+from xmra.mappings.entities import entities_mapping
+from xmra.mappings.gametypes import gametype_mapping
+from xmra.dependency_graph import config
 #from wand.image import Image
 
 

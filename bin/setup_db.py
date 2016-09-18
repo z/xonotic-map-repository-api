@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from xmra.model import setup_db
+from xmra.repositories.local.model import setup_db
 
 
 def main():

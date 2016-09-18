@@ -9,8 +9,8 @@ import matplotlib.font_manager as font_manager
 import struct
 import sys
 import os
-from xmra.entities import entities_mapping
-from xmra.entities import entity_properties
+from xmra.mappings import entities_mapping
+from xmra.mappings import entity_properties
 import json
 import re
 from xmra.util import replace_last

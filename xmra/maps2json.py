@@ -7,13 +7,13 @@ import argparse
 import time
 import os
 import datetime
-from xmra.packages import Library
-from xmra.packages import MapPackage
-from xmra.config import config
-from xmra.database import session
-from xmra.database import get_or_create
-from xmra.database import DateTimeEncoder
-from xmra import model
+from xmra.repositories.local.model import Library
+from xmra.objects.packages import MapPackage
+from xmra.dependency_graph import config
+from xmra.repositories.local.db import session
+from xmra.helpers.database import get_or_create
+from xmra.helpers.database import DateTimeEncoder
+from xmra.repositories.local import model
 
 
 def main():

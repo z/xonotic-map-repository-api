@@ -24,7 +24,7 @@ setup(
     entry_points={
        'console_scripts': [
           'xmra-add = xmra.maps2json:main',
-          'xmra-init = xmra.model:setup_db',
+          'xmra-init = xmra.repositories.local.model:setup_db',
        ]
     },
     install_requires=required
