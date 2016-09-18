@@ -12,7 +12,7 @@ from xmra.objects.packages import MapPackage
 from xmra.dependency_graph import config
 from xmra.repositories.local.db import session
 from xmra.helpers.database import get_or_create
-from xmra.helpers.database import DateTimeEncoder
+from xmra.util import DateTimeEncoder
 from xmra.repositories.local import model
 
 

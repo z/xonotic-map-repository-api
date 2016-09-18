@@ -4,6 +4,7 @@ import time
 import json
 import hashlib
 from shutil import copyfile
+from datetime import datetime
 
 
 def replace_last(s, old, new):
@@ -66,3 +67,12 @@ class ObjectEncoder(json.JSONEncoder):
         if hasattr(obj, '__json__'):
             return obj.__json__()
         return json.JSONEncoder.default(self, obj)
+
+
+class DateTimeEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, datetime):
+            return o.isoformat()
+
+        return json.JSONEncoder.default(self, o)
+
