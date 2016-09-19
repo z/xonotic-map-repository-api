@@ -82,7 +82,7 @@ class Bsp(Base):
 
 
 map_package_bsp_table = Table('map_package_bsp', Base.metadata,
-    Column('map_package_bsp_id', Integer, ForeignKey("map_package.map_package_id"),
+    Column('map_package_id', Integer, ForeignKey("map_package.map_package_id"),
            primary_key=True),
     Column('bsp_id', Integer, ForeignKey("bsp.bsp_id"),
            primary_key=True)

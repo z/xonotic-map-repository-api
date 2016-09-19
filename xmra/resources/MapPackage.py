@@ -9,6 +9,7 @@ from xmra.repositories.local.model import BspGametype
 from xmra.util import ObjectEncoder
 from xmra.util import DateTimeEncoder
 from sqlalchemy import func
+from sqlalchemy import or_
 
 
 class MapPackageCollection:
@@ -32,14 +33,29 @@ class MapPackageCollection:
         else:
             draw = 0
 
-        q = session.query(MapPackage).filter(MapPackage.bsp.any()).limit(limit).offset(offset)
+        q = session.query(MapPackage)
+
+        if 'search[value]' in req.params and len(req.params['search[value]']) > 2:
+            search = req.params['search[value]']
+            q = q.join(Bsp).filter(or_(
+                    MapPackage.shasum.contains('%' + search + '%'),
+                    MapPackage.pk3_file.contains('%' + search + '%'),
+                    Bsp.bsp_name.contains('%' + search + '%'),
+                    Bsp.author.contains('%' + search + '%'),
+                )
+            )
+
+        q = q.limit(limit).offset(offset)
+
+        records_filtered = q.count()
+
         map_packages = get_map_json(q)
 
         resp.body = json.dumps({
             'data': map_packages,
             'draw': draw,
             'recordsTotal': records_total,
-            'recordsFiltered': records_total,
+            'recordsFiltered': records_filtered,
         }, cls=ObjectEncoder)
 
     def on_post(self, req, resp):
