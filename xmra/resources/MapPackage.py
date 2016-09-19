@@ -45,9 +45,9 @@ class MapPackageCollection:
                 )
             )
 
-        q = q.limit(limit).offset(offset)
-
         records_filtered = q.count()
+
+        q = q.limit(limit).offset(offset)
 
         map_packages = get_map_json(q)
 
