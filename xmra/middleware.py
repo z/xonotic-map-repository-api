@@ -1,4 +1,6 @@
-ALLOWED_ORIGINS = ['http://localhost:8080']
+from xmra.dependency_graph import config
+
+ALLOWED_ORIGINS = ['http://{0}:{1}'.format(config['web']['host'], config['web']['port'])]
 
 
 class CorsMiddleware(object):

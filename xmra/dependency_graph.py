@@ -33,6 +33,10 @@ config = {
         'host': conf['api_host'],
         'port': conf['api_port'],
     },
+    'web': {
+        'host': conf['web_host'],
+        'port': conf['web_port'],
+    },
     'output_paths': {
         'packages': resources_dir + 'packages/',
         'mapshots': resources_dir + 'mapshots/',

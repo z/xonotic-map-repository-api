@@ -33,6 +33,10 @@ db_port = 5432
 # api settings 
 api_host = localhost
 api_port = 8010
+
+# for CORS
+web_host = localhost
+web_port = 8080
 ```
 
 Once you configure your database, run `xmra-init` to create the database schema.
