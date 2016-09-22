@@ -1,6 +1,11 @@
 from xmra.dependency_graph import config
+from xmra.logger import logger
 
-ALLOWED_ORIGINS = ['http://{0}:{1}'.format(config['web']['host'], config['web']['port'])]
+web_address = 'http://{0}:{1}'.format(config['web']['host'], config['web']['port'])
+
+ALLOWED_ORIGINS = [web_address]
+
+logger.debug(ALLOWED_ORIGINS)
 
 
 class CorsMiddleware(object):
