@@ -16,9 +16,6 @@ class MapPackageCollection:
 
     def on_get(self, req, resp):
         """Handles GET requests"""
-        print(req.params)
-
-        records_total = session.query(MapPackage).count()
 
         if 'start' in req.params:
             offset = req.params['start']
@@ -34,6 +31,8 @@ class MapPackageCollection:
             draw = 0
 
         q = session.query(MapPackage)
+
+        records_total = q.count()
 
         if 'search[value]' in req.params and len(req.params['search[value]']) > 2:
             search = req.params['search[value]']
@@ -66,7 +65,6 @@ class MapPackageResource:
 
     def on_get(self, req, resp, map_package_id):
         """Handles GET requests"""
-        print(req.params)
 
         q = session.query(MapPackage).filter_by(map_package_id=map_package_id).all()
         map_package = get_map_json(q)
