@@ -15,6 +15,8 @@ from xmra.repositories.local.db import session
 from xmra.helpers.database import get_or_create
 from xmra.util import DateTimeEncoder
 from xmra.repositories.local import model
+from xmra.logger import logger
+from sqlalchemy import func
 
 
 def main():
@@ -42,6 +44,15 @@ def main():
 def add_map_package(file):
 
     if file.endswith('.pk3') and os.path.isfile(config['output_paths']['packages'] + file):
+
+        logger.debug('Procesing map: {0}'.format(file))
+
+        q = session.query(func.count(model.MapPackage.pk3_file)).scalar()
+
+        if q > 0:
+            logger.debug('Map package already in database: {0}'.format(file))
+            return False, False, False
+
         mypk3 = MapPackage(pk3_file=file)
         pk3, category, errors = mypk3.process_package()
 

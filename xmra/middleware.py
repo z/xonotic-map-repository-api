@@ -3,7 +3,9 @@ from xmra.logger import logger
 
 web_address = 'http://{0}'.format(config['web']['host'])
 if config['web']['port'] != '80':
-    web_address += ':'.format(config['web']['port'])
+    web_address += ':{0}'.format(config['web']['port'])
+# if config['web']['host'] is '*':
+#     web_address = '*'
 
 ALLOWED_ORIGINS = [web_address]
 
