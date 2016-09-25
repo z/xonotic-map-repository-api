@@ -47,7 +47,7 @@ def add_map_package(file):
 
         logger.debug('Procesing map: {0}'.format(file))
 
-        q = session.query(func.count(model.MapPackage.pk3_file)).scalar()
+        q = session.query(model.MapPackage).filter_by(pk3_file=file).count()
 
         if q > 0:
             logger.debug('Map package already in database: {0}'.format(file))
