@@ -38,7 +38,7 @@ def main():
         pk3, category, errors = add_map_package(file)
 
     end_time = time.monotonic()
-    print('Operation took: ' + str(datetime.timedelta(seconds=end_time - start_time)))
+    logger.debug('Operation took: ' + str(datetime.timedelta(seconds=end_time - start_time)))
 
 
 def add_map_package(file):
@@ -83,8 +83,6 @@ def add_map_package(file):
                 entities=bsp.entities,
             )
 
-            print(new_bsp)
-
             session.add(new_bsp)
             session.commit()
 
@@ -92,14 +90,11 @@ def add_map_package(file):
 
             if bsp.gametypes:
                 for gametype in bsp.gametypes:
-                    print(gametype)
                     gametype = get_or_create(session, model.Gametype, name=gametype)
                     bsp_gametype = get_or_create(session, model.BspGametype, bsp_id=new_bsp.bsp_id, gametype_id=gametype.gametype_id)
-                    print(new_bsp.bsp_id)
 
             if bsp.entities:
                 for entity, value in bsp.entities.items():
-                    print(entity)
                     entity = get_or_create(session, model.Entity, name=entity)
                     bsp_entity = get_or_create(session, model.BspEntity, bsp_id=new_bsp.bsp_id, entity_id=entity.entity_id, value=value)
 
@@ -109,7 +104,7 @@ def add_map_package(file):
         return pk3, category, errors
 
     else:
-        print('Not found or not pk3.')
+        logger.debug('Not found or not pk3.')
         raise SystemExit
 
 
