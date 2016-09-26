@@ -56,6 +56,10 @@ def add_map_package(file):
         mypk3 = MapPackage(pk3_file=file)
         pk3, category, errors = mypk3.process_package()
 
+        if category != 'maps':
+            logger.debug('Not map package: {0}'.format(file))
+            return False, False, False
+
         map_package = model.MapPackage(pk3_file=pk3.pk3_file, shasum=pk3.shasum, filesize=pk3.filesize)
 
         session.add(map_package)
