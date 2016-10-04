@@ -10,3 +10,5 @@ web/resources/*
 !web/resources/images/
 web/resources/mapshots/maps/*
 xmra.egg-info
+build/lib/
+dist/
