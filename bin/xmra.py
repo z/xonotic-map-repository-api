@@ -5,9 +5,10 @@
 # Contact: z@xnz.me
 
 import argparse
-import time
-import os
 import datetime
+import logging
+import os
+import time
 from xmra.repositories.local.model import Library
 from xmra.xonotic.objects import MapPackage
 from xmra.config import config
@@ -15,8 +16,10 @@ from xmra.repositories.local.db import session
 from xmra.helpers.database import get_or_create
 from xmra.util import DateTimeEncoder
 from xmra.repositories.local import model
-from xmra.logger import logger
 from sqlalchemy import func
+
+
+log = logging.getLogger(__name__)
 
 
 def main():
@@ -38,26 +41,26 @@ def main():
         pk3, category, errors = add_map_package(file)
 
     end_time = time.monotonic()
-    logger.debug('Operation took: ' + str(datetime.timedelta(seconds=end_time - start_time)))
+    log.debug('Operation took: ' + str(datetime.timedelta(seconds=end_time - start_time)))
 
 
 def add_map_package(file):
 
     if file.endswith('.pk3') and os.path.isfile(config['xmra']['packages_dir'] + file):
 
-        logger.debug('Procesing map: {0}'.format(file))
+        log.debug('Procesing map: {0}'.format(file))
 
         q = session.query(model.MapPackage).filter_by(pk3_file=file).count()
 
         if q > 0:
-            logger.debug('Map package already in database: {0}'.format(file))
+            log.debug('Map package already in database: {0}'.format(file))
             return False, False, False
 
         mypk3 = MapPackage(pk3_file=file)
         pk3, category, errors = mypk3.process_package()
 
         if category != 'maps':
-            logger.debug('Not map package: {0}'.format(file))
+            log.debug('Not map package: {0}'.format(file))
             return False, False, False
 
         map_package = model.MapPackage(pk3_file=pk3.pk3_file, shasum=pk3.shasum, filesize=pk3.filesize)
@@ -104,7 +107,7 @@ def add_map_package(file):
         return pk3, category, errors
 
     else:
-        logger.debug('Not found or not pk3.')
+        log.debug('Not found or not pk3.')
         raise SystemExit
 
 

@@ -1,5 +1,9 @@
+import logging
 from xmra.config import config
-from xmra.logger import logger
+
+
+log = logging.getLogger(__name__)
+
 
 web_address = 'http://{0}'.format(config['xmra']['web_host'])
 if config['xmra']['web_port'] != '80':
@@ -9,7 +13,7 @@ if config['xmra']['web_port'] != '80':
 
 ALLOWED_ORIGINS = [web_address]
 
-logger.debug(ALLOWED_ORIGINS)
+log.debug(ALLOWED_ORIGINS)
 
 
 class CorsMiddleware(object):
