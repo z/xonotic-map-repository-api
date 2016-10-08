@@ -7,7 +7,7 @@ import gunicorn.app.base
 from gunicorn.six import iteritems
 
 from xmra import app
-from xmra.dependency_graph import config
+from xmra.config import config
 
 
 def number_of_workers():

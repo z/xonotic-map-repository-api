@@ -10,7 +10,7 @@ from xmra.util import hash_file
 from xmra.util import ObjectEncoder
 from xmra.mappings.entities import entities_mapping
 from xmra.mappings.gametypes import gametype_mapping
-from xmra.dependency_graph import config
+from xmra.config import config
 #from wand.image import Image
 
 

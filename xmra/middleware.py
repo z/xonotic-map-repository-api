@@ -1,4 +1,4 @@
-from xmra.dependency_graph import config
+from xmra.config import config
 from xmra.logger import logger
 
 web_address = 'http://{0}'.format(config['xmra']['web_host'])

@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from xmra.dependency_graph import config
+from xmra.config import config
 
 # Initiate connection and create session
 engine = create_engine(
