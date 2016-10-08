@@ -28,7 +28,7 @@ def main():
     if args.all:
 
         # Process all the files
-        for file in sorted(os.listdir(config['output_paths']['packages'])):
+        for file in sorted(os.listdir(config['xmra']['packages_dir'])):
             if file.endswith('.pk3'):
                 pk3, category, errors = add_map_package(file)
 
@@ -43,7 +43,7 @@ def main():
 
 def add_map_package(file):
 
-    if file.endswith('.pk3') and os.path.isfile(config['output_paths']['packages'] + file):
+    if file.endswith('.pk3') and os.path.isfile(config['xmra']['packages_dir'] + file):
 
         logger.debug('Procesing map: {0}'.format(file))
 

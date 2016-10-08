@@ -1,9 +1,9 @@
 from xmra.dependency_graph import config
 from xmra.logger import logger
 
-web_address = 'http://{0}'.format(config['web']['host'])
-if config['web']['port'] != '80':
-    web_address += ':{0}'.format(config['web']['port'])
+web_address = 'http://{0}'.format(config['xmra']['web_host'])
+if config['xmra']['web_port'] != '80':
+    web_address += ':{0}'.format(config['xmra']['web_port'])
 # if config['web']['host'] is '*':
 #     web_address = '*'
 

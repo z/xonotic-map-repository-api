@@ -31,7 +31,7 @@ class StandaloneApplication(gunicorn.app.base.BaseApplication):
         return self.application
 
 options = {
-    'bind': '%s:%s' % (config['api']['host'], config['api']['port']),
+    'bind': '%s:%s' % (config['xmra']['api_host'], config['xmra']['api_port']),
     'reload': True
 }
 StandaloneApplication(app.api, options).run()
