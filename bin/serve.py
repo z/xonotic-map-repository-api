@@ -34,6 +34,8 @@ class StandaloneApplication(gunicorn.app.base.BaseApplication):
 options = {
     'bind': '%s:%s' % (config['xmra']['api_host'], config['xmra']['api_port']),
     'reload': True,
+    'logger_class': "simple",
+    'logconfig': config_file_with_path,
 }
 
 log.info("Starting up the API")
