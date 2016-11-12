@@ -12,3 +12,4 @@ web/resources/mapshots/maps/*
 xmra.egg-info
 build/lib/
 dist/
+xmr.log
