@@ -10,7 +10,7 @@ from xmra.util import hash_file
 from xmra.util import ObjectEncoder
 from xmra.mappings.entities import entities_mapping
 from xmra.mappings.gametypes import gametype_mapping
-from xmra.dependency_graph import config
+from xmra.config import config
 #from wand.image import Image
 
 
@@ -50,7 +50,7 @@ class MapPackage(object):
     """
     def __init__(self, pk3_file='', entities_list=entities_mapping.keys(), gametypes_list=gametype_mapping.keys()):
 
-        path_packages = config['output_paths']['packages']
+        path_packages = config['xmra']['packages_dir']
 
         data = {
             'pk3_file': pk3_file,
@@ -61,7 +61,7 @@ class MapPackage(object):
         }
 
         self.pk3_file = pk3_file
-        self.path = config['output_paths']['packages']
+        self.path = config['xmra']['packages_dir']
         self.shasum = data['shasum']
         self._bsp = data['bsp']
         self.date = data['date']
@@ -102,10 +102,10 @@ class MapPackage(object):
         category = 'other'
         errors = {}
 
-        path_bsp = config['output_paths']['bsp']
-        path_entities = config['output_paths']['entities']
-        path_mapshots = config['output_paths']['mapshots']
-        path_radars = config['output_paths']['radars']
+        path_bsp = config['xmra']['bsp_dir']
+        path_entities = config['xmra']['entities_dir']
+        path_mapshots = config['xmra']['mapshots_dir']
+        path_radars = config['xmra']['radars_dir']
 
         # temp variables
         bsps = []
@@ -151,7 +151,9 @@ class MapPackage(object):
             if len(bsps):
 
                 # If this option is on, attempt to extract enitity info
-                if config['parse_entities'] == 'True':
+                should_parse_entities = config['xmra']['parse_entities'] == 'True'
+
+                if should_parse_entities:
 
                     for bsp in bsps:
                         bspname = bsp_names[bsp]
@@ -172,7 +174,7 @@ class MapPackage(object):
                         rbsp = re.escape(bsp)
 
                         if re.search('^maps/' + rbsp + '\.ent', member):
-                            if config['parse_entities'] == 'True':
+                            if should_parse_entities:
                                 zip.extract(member, path_entities + bspname)
 
                                 entities_file = path_entities + bspname + '/' + member
@@ -182,7 +184,7 @@ class MapPackage(object):
 
                         if re.search('^maps/' + rbsp + '\.(jpg|tga|png)$', member):
                             data['bsp'][bspname]['mapshot'] = member
-                            if config['extract_mapshots'] == 'True':
+                            if config['xmra']['extract_mapshots'] == 'True':
                                 zip.extract(member, path_mapshots)
                                 mapshot_image = path_mapshots + member
                                 if member.endswith('.tga'):
@@ -190,7 +192,7 @@ class MapPackage(object):
 
                         if re.search('^gfx/' + rbsp + '_(radar|mini)\.(jpg|tga|png)$', member):
                             data['bsp'][bspname]['radar'] = member
-                            if config['extract_radars'] == 'True':
+                            if config['xmra']['extract_radars'] == 'True':
                                 zip.extract(member, path_radars)
                                 radar_image = path_radars + member
                                 subprocess.call(['convert', radar_image, '-depth', '8', '-trim', 'PNG24:' + path_radars + 'gfx/' + bsp + '_mini.png'])
@@ -316,8 +318,8 @@ class Bsp(object):
 
     def extract_entities_file(self):
 
-        path_entities = config['output_paths']['entities']
-        path_bsp = config['output_paths']['bsp'] + self.bsp_name + '/'
+        path_entities = config['xmra']['entities_dir']
+        path_bsp = config['xmra']['bsp_dir'] + self.bsp_name + '/'
         bsp_entities_file = path_entities + self.bsp_name + '.ent'
 
         try:
@@ -334,7 +336,7 @@ class Bsp(object):
         errors = {}
 
         if not entities_file:
-            path_entities = config['output_paths']['entities']
+            path_entities = config['xmra']['entities_dir']
             bsp_entities_file = path_entities + self.bsp_name + '.ent'
 
             if not os.path.exists(bsp_entities_file):

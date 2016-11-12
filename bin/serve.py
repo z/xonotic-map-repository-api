@@ -1,13 +1,14 @@
 from __future__ import unicode_literals
 
 import multiprocessing
-
+import logging
 import gunicorn.app.base
-
 from gunicorn.six import iteritems
-
 from xmra import app
-from xmra.dependency_graph import config
+from xmra.config import config, config_file_with_path
+
+
+log = logging.getLogger(__name__)
 
 
 def number_of_workers():
@@ -31,7 +32,12 @@ class StandaloneApplication(gunicorn.app.base.BaseApplication):
         return self.application
 
 options = {
-    'bind': '%s:%s' % (config['api']['host'], config['api']['port']),
-    'reload': True
+    'bind': '%s:%s' % (config['xmra']['api_host'], config['xmra']['api_port']),
+    'reload': True,
+    'logger_class': "simple",
+    'logconfig': config_file_with_path,
 }
+
+log.info("Starting up the API")
+
 StandaloneApplication(app.api, options).run()
