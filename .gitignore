@@ -1,15 +1,21 @@
-*.swp
-*.swo
-*.idea
-*__pycache__
+# Python
 venv
 activate
+.eggs
+*.egg-info
+
+# Editors
+.idea
+*.swo
+*.swp
+**__pycache__**
+
+# application
 entities.json
 error.log
 web/resources/*
 !web/resources/images/
 web/resources/mapshots/maps/*
-xmra.egg-info
-build/lib/
+build/
 dist/
 xmr.log

@@ -1,0 +1,40 @@
+version: '2'
+services:
+   postgres:
+       image: postgres:9.5
+       ports:
+           - "5432:5432"
+       environment:
+           - LC_ALL=C.UTF-8
+           - POSTGRES_DB=map_repo
+           - POSTGRES_USER=xonotic
+           - POSTGRES_PASSWORD=password
+   api:
+       build:
+           context: .
+           dockerfile: docker/containers/api.Dockerfile
+       ports:
+           - "8080:8010"
+       environment:
+           - PGPASSWORD=password
+       command: /bin/bash -c "/application/wait-for-services.sh postgres gunicorn -b 0.0.0.0:8010 --reload xmra.app:api"
+       #command: ./wait-for-services.sh postgres xmra-init ; xmra-serve
+       #command: /bin/bash
+       tty: true
+       volumes:
+           - ./docker/containers/api/bin/wait-for-services.sh:/application/wait-for-services.sh
+           - ./docker/containers/api/config/xmra.ini:/root/.xmra.ini
+           - ~/.xonotic/repo_resources:/root/.xonotic/repo_resources
+           - ./xmra:/application/xmra
+           - ./bin:/application/bin
+           - ./requirements.in:/application/requirements.in
+           #- ./setup.cfg:/application/setup.cfg
+           - ./setup.py:/application/setup.py
+           - ./MANIFEST.in:/application/MANIFEST.in
+           - ./README.md:/application/README.md
+           - ./LICENSE:/application/LICENSE
+           - ./CHANGELOG.md:/application/CHANGELOG.md
+           - ./xmr.log:/application/xmr.log
+           # - ./gunicorn.log:/tmp/gunicorn.access.log
+       links:
+           - postgres
