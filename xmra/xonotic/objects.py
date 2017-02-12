@@ -2,6 +2,7 @@ import zipfile
 import re
 import os
 import json
+import pkg_resources
 import shutil
 import subprocess
 import collections
@@ -12,6 +13,8 @@ from xmra.mappings.entities import entities_mapping
 from xmra.mappings.gametypes import gametype_mapping
 from xmra.config import config
 #from wand.image import Image
+
+bsp2ent = pkg_resources.resource_filename('bin', "bsp2ent")
 
 
 class Library(object):
@@ -328,7 +331,7 @@ class Bsp(object):
             pass
 
         with open(bsp_entities_file, 'w') as f:
-            subprocess.call(["./bin/bsp2ent", path_bsp + self.bsp_file], stdin=subprocess.PIPE, stdout=f)
+            subprocess.call([bsp2ent, path_bsp + self.bsp_file], stdin=subprocess.PIPE, stdout=f)
 
     def parse_entities_file(self, entities_file=''):
 
