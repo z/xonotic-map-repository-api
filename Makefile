@@ -19,7 +19,6 @@ help:
 clean:
 	@find . -name '__pycache__' -exec rm -rf {} +
 	@find . -name '*.py[co]' -exec rm -f {} +
-	@cd docs && $(MAKE) clean
 	@rm -rf .tox
 
 lint:

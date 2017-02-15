@@ -34,7 +34,7 @@ services:
            - ./README.md:/application/README.md
            - ./LICENSE:/application/LICENSE
            - ./CHANGELOG.md:/application/CHANGELOG.md
-           - ./xmr.log:/application/xmr.log
+           #- ./xmr.log:/application/xmr.log
            # - ./gunicorn.log:/tmp/gunicorn.access.log
        links:
            - postgres

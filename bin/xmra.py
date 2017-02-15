@@ -48,7 +48,7 @@ def add_map_package(file):
 
     if file.endswith('.pk3') and os.path.isfile(config['xmra']['packages_dir'] + file):
 
-        log.debug('Procesing map: {0}'.format(file))
+        log.info('Processing map: {0}'.format(file))
 
         q = session.query(model.MapPackage).filter_by(pk3_file=file).count()
 

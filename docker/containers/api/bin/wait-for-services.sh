@@ -14,7 +14,7 @@ done
 find . -name '__pycache__' -exec rm -rf {} +
 find . -name '*.py[co]' -exec rm -f {} +
 
-python setup.py clean && python setup.py install
+python setup.py clean && python setup.py develop
 
 xmra-init
 

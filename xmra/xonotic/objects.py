@@ -14,6 +14,10 @@ from xmra.mappings.gametypes import gametype_mapping
 from xmra.config import config
 #from wand.image import Image
 
+import logging
+
+log = logging.getLogger(__name__)
+
 bsp2ent = pkg_resources.resource_filename('bin', "bsp2ent")
 
 
@@ -42,7 +46,7 @@ class Library(object):
         elif category is 'entities_fail':
             self.entities_fail.append(pk3)
         elif category is 'corrupt':
-            self.entities_fail.append(pk3)
+            self.corrupt.append(pk3)
         else:
             self.other.append(pk3)
 
@@ -100,6 +104,8 @@ class MapPackage(object):
         return json.dumps({'data': self}, cls=ObjectEncoder)
 
     def process_package(self):
+
+        log.info('processing pk3')
 
         data = {'bsp': {}}
         category = 'other'
@@ -163,9 +169,13 @@ class MapPackage(object):
 
                         zip.extract(bsp, path_bsp + bspname)
 
+                        entities_bsp_file = path_entities + bspname + '.ent'
                         entities = package_bsps[bspname].extract_entities_file()
+                        entities_from_bsp, entity_errors = package_bsps[bspname].parse_entities_file(entities_file=entities_bsp_file)
 
-                        # print(entities)
+                        print(entities)
+                        print(entities_from_bsp)
+                        data['bsp'][bspname].update(entities_from_bsp)
                         # print(errors)
                         # shutil.rmtree(path_bsp + bspname)
 
@@ -332,6 +342,7 @@ class Bsp(object):
 
         with open(bsp_entities_file, 'w') as f:
             subprocess.call([bsp2ent, path_bsp + self.bsp_file], stdin=subprocess.PIPE, stdout=f)
+            return f
 
     def parse_entities_file(self, entities_file=''):
 
@@ -373,7 +384,9 @@ class Bsp(object):
         except UnicodeDecodeError:
             errors = True
             #category = 'entities_fail'
-            bsp['entities'] = {}
+            bsp['entities'] = {
+                'fail': 'failed to parse entities file'
+            }
             print("Failed to parse entities file for: " + self.bsp_file)
 
         self.entities = bsp['entities']
